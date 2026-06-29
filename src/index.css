@@ -167,11 +167,134 @@ button {
   color: var(--muted);
   font-size: 14px;
 }
+.day-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
 .day-count {
   font-size: 13px;
   color: var(--muted);
-  margin-top: 6px;
   font-variant-numeric: tabular-nums;
+}
+.return-pill {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--dk-red);
+  background: rgba(200, 16, 46, 0.08);
+  border-radius: 99px;
+  padding: 4px 10px;
+}
+
+/* ---- Info del día (notas / transporte / costes) ---- */
+.info-box {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  margin-top: 14px;
+  box-shadow: var(--shadow);
+}
+.info-box-title {
+  font-size: 14px;
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+.tips {
+  margin: 0;
+  padding-left: 18px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.tips li {
+  font-size: 13.5px;
+  color: var(--text);
+  line-height: 1.4;
+}
+
+.info-details {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  margin-top: 10px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+.info-details > summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 14px;
+  font-size: 15px;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.info-details > summary::-webkit-details-marker {
+  display: none;
+}
+.info-details > summary::after {
+  content: "›";
+  font-size: 20px;
+  color: var(--muted);
+  transform: rotate(90deg);
+  transition: transform 0.2s ease;
+}
+.info-details[open] > summary::after {
+  transform: rotate(-90deg);
+}
+
+.legs {
+  padding: 0 14px 8px;
+  display: flex;
+  flex-direction: column;
+}
+.leg {
+  padding: 10px 0;
+  border-top: 1px solid var(--line);
+}
+.leg-route {
+  font-size: 14px;
+  font-weight: 600;
+  line-height: 1.35;
+}
+.leg-meta {
+  font-size: 12.5px;
+  color: var(--muted);
+  margin-top: 2px;
+}
+.leg-cost {
+  font-size: 12.5px;
+  color: var(--dk-red);
+  margin-top: 3px;
+}
+
+.costs {
+  padding: 0 14px 10px;
+}
+.cost-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+  padding: 9px 0;
+  border-top: 1px solid var(--line);
+  font-size: 14px;
+}
+.cost-row .cost-price {
+  color: var(--muted);
+  text-align: right;
+  flex: 0 0 auto;
+  max-width: 60%;
+}
+.cost-row.total {
+  font-weight: 700;
+}
+.cost-row.total .cost-price {
+  color: var(--dk-red);
 }
 
 /* ---- Item card ---- */

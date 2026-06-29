@@ -1,7 +1,7 @@
 // Datos del viaje a Copenhague (20–27 julio).
-// Extraídos de la guía diaria. Cada día tiene una lista de paradas/actividades
-// que se pueden marcar como "visto". El estado real (marcado/no marcado) vive en
-// Supabase; aquí solo está el contenido base con el que se siembra la base de datos.
+// Extraídos de la guía diaria (incluye transporte, costes y notas prácticas).
+// Los ítems con checkbox ("qué ver") se sincronizan en Supabase; el resto
+// (transporte, costes, notas) es información de referencia de cada día.
 
 export interface SeedItem {
   /** Identificador estable del ítem (slug). Se usa como clave en la base de datos. */
@@ -10,14 +10,39 @@ export interface SeedItem {
   notes?: string;
 }
 
+export interface TransportLeg {
+  /** Tramo / trayecto. */
+  from: string;
+  /** Medio (tren, bus, andando, taxi…). */
+  mode?: string;
+  /** Frecuencia (cada 20 min…). */
+  freq?: string;
+  /** Tiempo aproximado. */
+  time?: string;
+  /** Coste, si aplica. */
+  cost?: string;
+}
+
+export interface CostRow {
+  concept: string;
+  price: string;
+  /** Resáltala si es la fila de total. */
+  total?: boolean;
+}
+
 export interface TripDay {
   /** Clave estable del día, p.ej. "20". */
   key: string;
   date: string; // ISO date, 2026 (verano)
-  label: string; // "Dom 20 jul"
+  label: string; // "Lun 20 jul"
   title: string; // título del día
   subtitle?: string; // resumen corto
-  items: SeedItem[];
+  /** Hora prevista de vuelta a casa. */
+  returnTime?: string;
+  items: SeedItem[]; // checkboxes "qué ver"
+  transport?: TransportLeg[];
+  costs?: CostRow[];
+  tips?: string[]; // notas prácticas
 }
 
 export const TRIP_TITLE = "Copenhague";
@@ -37,26 +62,30 @@ export const DAYS: TripDay[] = [
         notes: "Vuelo aterriza 14:40. Salida del aeropuerto ~15:30, en casa ~16:30.",
       },
       {
-        slug: "20-transporte-casa",
-        title: "Transporte a casa",
-        notes:
-          "Metro M2 (cada 4–6 min) hasta el centro y tren a Østerport (cada 5–10 min), luego 10 min andando. Billete aeropuerto→Østerport ~5 €/adulto (10 € total).",
-      },
-      {
         slug: "20-compra-netto",
         title: "Compra en Netto (Amerika Plads)",
         notes: "A 10 minutos andando de casa.",
       },
-      {
-        slug: "20-ver-barrio",
-        title: "Pasear y ver el barrio",
-      },
+      { slug: "20-ver-barrio", title: "Pasear y ver el barrio" },
       {
         slug: "20-activar-copenhagen-card",
         title: "Preparar la Copenhagen Card",
-        notes:
-          "App 'Copenhagen Card – City Guide': comparar precios dentro de la app. Activar a la entrada del Tivoli, 12:00 del 21 de julio.",
+        notes: "Activarla a la entrada del Tivoli, 12:00 del 21 de julio.",
       },
+    ],
+    transport: [
+      {
+        from: "Metro aeropuerto (M2)",
+        freq: "cada 4–6 min",
+        time: "10–12 min",
+        cost: "Billete aeropuerto → Østerport 5 €/adulto (10 € total)",
+      },
+      { from: "Tren centro → Østerport", freq: "cada 5–10 min", time: "5 min" },
+      { from: "Andar hasta casa", mode: "andando", time: "10 min" },
+    ],
+    tips: [
+      "Copenhagen Card – City Guide (app): comparar precios dentro de la app antes de activarla.",
+      "Activar la tarjeta a la entrada del Tivoli, 12:00 del 21 de julio.",
     ],
   },
   {
@@ -65,16 +94,17 @@ export const DAYS: TripDay[] = [
     label: "Mar 21 jul",
     title: "Centro + Tivoli",
     subtitle: "Kastellet, Nyhavn, LEGO y Tivoli",
+    returnTime: "En casa máx. 18:30",
     items: [
       {
         slug: "21-kastellet",
         title: "Kastellet",
-        notes: "Parque amplio y relajado. 20–25 min andando desde casa.",
+        notes: "Parque amplio y relajado.",
       },
       {
         slug: "21-sirenita",
         title: "La Sirenita",
-        notes: "Muy cerca de casa / de paso desde Kastellet.",
+        notes: "De paso, muy cerca de casa.",
       },
       {
         slug: "21-amalienborg",
@@ -84,30 +114,40 @@ export const DAYS: TripDay[] = [
       {
         slug: "21-nyhavn",
         title: "Nyhavn",
-        notes: "El puerto nuevo con las casas de colores. A 5–7 min de la guardia.",
+        notes: "El puerto nuevo con las casas de colores. A 5 min de la guardia.",
       },
       {
         slug: "21-kongens-nytorv",
         title: "Kongens Nytorv (centro)",
-        notes: "Plaza y Teatro Real. A 2–3 min de Nyhavn.",
+        notes: "Plaza y Teatro Real.",
       },
       {
         slug: "21-lego-store",
-        title: "LEGO Store",
-        notes: "Vimmelskaftet 37 (zona Strøget). La experiencia clave para el peque.",
+        title: "Tienda LEGO",
+        notes: "Vimmelskaftet 37 (zona Strøget). Experiencia clave para el peque, y la zona más bonita.",
       },
       {
         slug: "21-stroget",
         title: "Strøget",
-        notes: "Una de las calles peatonales más largas de Europa.",
+        notes: "Una de las calles peatonales más largas de Europa, junto a la tienda LEGO.",
       },
       {
         slug: "21-tivoli",
         title: "Tivoli",
         notes:
-          "Con ~2 horas sobra. Pulsera ~23 € para montar en todo (cada atracción suelta ~8 €). Volver a casa a las 18:30 máx.",
+          "Con ~2 horas sobra. Atracciones para el niño de 7 años. Pulsera ~23 € para montar en todo, o ~8 €/atracción suelta.",
       },
     ],
+    transport: [
+      { from: "Casa → Kastellet → Sirenita → Amalienborg", mode: "andando", time: "20–25 min" },
+      { from: "Amalienborg → Nyhavn", mode: "andando", time: "5–7 min" },
+      { from: "Nyhavn → Kongens Nytorv", mode: "andando", time: "2–3 min" },
+      { from: "Kongens Nytorv → LEGO Store", mode: "andando", time: "5 min" },
+      { from: "LEGO → Tivoli", mode: "andando", time: "10–15 min" },
+      { from: "Tivoli → Østerport (vuelta)", mode: "tren", time: "5–7 min" },
+      { from: "Østerport → Casa", mode: "andando", time: "10 min" },
+    ],
+    tips: ["Activar la Copenhagen Card justo antes de entrar al Tivoli."],
   },
   {
     key: "22",
@@ -115,12 +155,13 @@ export const DAYS: TripDay[] = [
     label: "Mié 22 jul",
     title: "Experimentarium + ciudad",
     subtitle: "Ciencia, Nyboder y Jardín Botánico",
+    returnTime: "Vuelta a las 18:00",
     items: [
       {
         slug: "22-experimentarium",
         title: "Experimentarium",
         notes:
-          "2–3 horas. Zona de agua súper divertida, experimentos prácticos y juegos de movimiento. Tren a Hellerup + bus.",
+          "Interactivo, 2–3 horas. Zona de agua súper divertida, experimentos prácticos y juegos táctiles/de movimiento.",
       },
       {
         slug: "22-nyboder",
@@ -138,6 +179,17 @@ export const DAYS: TripDay[] = [
         notes: "Mercado cercano al Jardín Botánico.",
       },
     ],
+    transport: [
+      { from: "Casa → Østerport", mode: "andando", time: "10 min" },
+      { from: "Østerport → Hellerup", mode: "tren", time: "5 min" },
+      { from: "Hellerup → Experimentarium", mode: "bus", time: "10 min" },
+      { from: "Experimentarium → Hellerup estación", mode: "andando", time: "5–10 min" },
+      { from: "Hellerup → Nørreport (centro)", mode: "tren", time: "10–15 min" },
+      { from: "Nørreport → Nyboder", mode: "andando", time: "5–10 min" },
+      { from: "Nyboder → Jardín Botánico", mode: "andando", time: "10 min" },
+      { from: "Jardín Botánico → Østerport", mode: "andando", time: "10–15 min" },
+      { from: "Østerport → casa", mode: "andando", time: "10 min" },
+    ],
   },
   {
     key: "23",
@@ -145,11 +197,12 @@ export const DAYS: TripDay[] = [
     label: "Jue 23 jul",
     title: "Helsingør",
     subtitle: "Castillo de Hamlet",
+    returnTime: "Vuelta a las 15:00",
     items: [
       {
         slug: "23-kronborg",
         title: "Castillo de Kronborg",
-        notes: "El castillo de Hamlet. Incluido con la Copenhagen Card. Tren directo ~50 min.",
+        notes: "El castillo de Hamlet. Incluido con la Copenhagen Card.",
       },
       {
         slug: "23-casamatas",
@@ -163,6 +216,9 @@ export const DAYS: TripDay[] = [
         notes: "Calles y casas típicas.",
       },
     ],
+    transport: [
+      { from: "Østerport → Helsingør", mode: "tren directo", freq: "cada 20 min", time: "50 min" },
+    ],
   },
   {
     key: "24",
@@ -170,11 +226,12 @@ export const DAYS: TripDay[] = [
     label: "Vie 24 jul",
     title: "Roskilde",
     subtitle: "Barcos vikingos y fiordo",
+    returnTime: "Vuelta prevista ~17:00",
     items: [
       {
         slug: "24-museo-vikingo",
         title: "Museo Vikingo",
-        notes: "Barcos vikingos reales y talleres. Tren ~30 min. Ida incluida en la tarjeta.",
+        notes: "Barcos vikingos reales y talleres.",
       },
       {
         slug: "24-fiordo",
@@ -183,9 +240,18 @@ export const DAYS: TripDay[] = [
       },
       {
         slug: "24-centro-roskilde",
-        title: "Paseo por el centro",
-        notes: "Día tranquilo, sin entradas. Vuelta prevista ~17:00.",
+        title: "Paseo relajado por el centro",
+        notes: "Día tranquilo, sin entradas.",
       },
+    ],
+    transport: [
+      { from: "Østerport → Roskilde", mode: "tren", freq: "cada 10–20 min", time: "30 min" },
+    ],
+    costs: [
+      { concept: "Ida", price: "incluida en la tarjeta" },
+      { concept: "Vuelta (2 adultos)", price: "20–30 €" },
+      { concept: "Niño", price: "gratis" },
+      { concept: "Total", price: "20–30 €", total: true },
     ],
   },
   {
@@ -198,7 +264,6 @@ export const DAYS: TripDay[] = [
       {
         slug: "25-stortorget",
         title: "Stortorget (plaza principal)",
-        notes: "Tren directo desde Østerport ~35–40 min (cada 20 min). Recomendados 09:53 o 10:13.",
       },
       {
         slug: "25-lilla-torg",
@@ -208,13 +273,32 @@ export const DAYS: TripDay[] = [
       {
         slug: "25-malmohus",
         title: "Malmöhus Slott",
-        notes: "Castillo + acuario. ~10 €/adulto (niños gratis o reducido).",
+        notes: "Castillo + acuario.",
       },
       {
         slug: "25-parques-malmo",
         title: "Parques de Malmö",
-        notes: "Se puede ver todo andando. Trenes de vuelta recomendados 16:00 o 16:20.",
+        notes: "Se puede ver todo andando.",
       },
+    ],
+    transport: [
+      { from: "Casa → Østerport", mode: "andando", time: "10 min" },
+      {
+        from: "Østerport → Malmö C",
+        mode: "tren directo",
+        freq: "cada 20 min",
+        time: "35–40 min",
+      },
+      { from: "Malmö → Østerport", mode: "tren directo", freq: "cada 20 min" },
+    ],
+    costs: [
+      { concept: "Tren (ida/vuelta)", price: "50–80 €" },
+      { concept: "Malmöhus Slott (castillo y acuario)", price: "~10 €/adulto (niños gratis o reducido)" },
+      { concept: "Total", price: "60–90 €", total: true },
+    ],
+    tips: [
+      "Trenes de ida recomendados: 09:53 o 10:13.",
+      "Trenes de vuelta recomendados: 16:00 o 16:20.",
     ],
   },
   {
@@ -222,7 +306,8 @@ export const DAYS: TripDay[] = [
     date: "2026-07-26",
     label: "Dom 26 jul",
     title: "Odense + Egeskov",
-    subtitle: "Castillo y laberinto",
+    subtitle: "Castillo y laberinto (Egeskov 3–4 h)",
+    returnTime: "Vuelta aprox. 16:00",
     items: [
       {
         slug: "26-egeskov-laberinto",
@@ -239,15 +324,29 @@ export const DAYS: TripDay[] = [
         title: "Egeskov: Castillo",
         notes: "Exterior precioso. 20–30 min.",
       },
-      {
-        slug: "26-egeskov-coches",
-        title: "Egeskov: Museo de coches",
-      },
+      { slug: "26-egeskov-coches", title: "Egeskov: Museo de coches" },
       {
         slug: "26-egeskov-jardines",
         title: "Egeskov: Jardines",
-        notes: "20–30 min. En total Egeskov son 3–4 h.",
+        notes: "20–30 min.",
       },
+    ],
+    transport: [
+      { from: "Casa → Østerport", mode: "andando", time: "10 min" },
+      { from: "Østerport → København H", mode: "tren", freq: "cada 5–10 min", time: "10 min" },
+      { from: "København H → Odense", mode: "tren", freq: "cada 15–30 min", time: "1h15" },
+      { from: "Odense ↔ Egeskov", mode: "taxi", time: "25–30 min" },
+      { from: "Odense → København H", mode: "tren", freq: "cada 15–30 min", time: "1h15" },
+      { from: "København H → Østerport", mode: "tren", freq: "cada 5–10 min", time: "10 min" },
+    ],
+    costs: [
+      {
+        concept: "Tren ida/vuelta",
+        price: "100–120 € (más barato comprando con 4 semanas de antelación)",
+      },
+      { concept: "Taxi ida/vuelta", price: "70–90 €" },
+      { concept: "Entradas Egeskov (incluye todo)", price: "75–80 €" },
+      { concept: "Total", price: "245–290 €", total: true },
     ],
   },
   {
@@ -256,13 +355,7 @@ export const DAYS: TripDay[] = [
     label: "Lun 27 jul",
     title: "Salida",
     subtitle: "Vuelta a casa",
-    items: [
-      {
-        slug: "27-salida",
-        title: "Salida",
-        notes: "Último día del viaje.",
-      },
-    ],
+    items: [{ slug: "27-salida", title: "Salida", notes: "Último día del viaje." }],
   },
 ];
 

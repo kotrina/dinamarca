@@ -61,11 +61,14 @@ export default function DaysView({
       <div className="day-head">
         <h2>{day.title}</h2>
         {day.subtitle && <p>{day.subtitle}</p>}
-        {dayItems.length > 0 && (
-          <div className="day-count">
-            {done} de {dayItems.length} visto{dayItems.length === 1 ? "" : "s"}
-          </div>
-        )}
+        <div className="day-meta">
+          {dayItems.length > 0 && (
+            <span className="day-count">
+              {done} de {dayItems.length} visto{dayItems.length === 1 ? "" : "s"}
+            </span>
+          )}
+          {day.returnTime && <span className="return-pill">🏠 {day.returnTime}</span>}
+        </div>
       </div>
 
       {dayItems.length === 0 ? (
@@ -79,6 +82,48 @@ export default function DaysView({
             <ItemRow key={it.id} item={it} onToggle={onToggle} onRemove={onRemove} />
           ))}
         </div>
+      )}
+
+      {day.tips && day.tips.length > 0 && (
+        <div className="info-box">
+          <div className="info-box-title">📌 Notas</div>
+          <ul className="tips">
+            {day.tips.map((t, i) => (
+              <li key={i}>{t}</li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {day.transport && day.transport.length > 0 && (
+        <details className="info-details">
+          <summary>🚆 Cómo moverse</summary>
+          <div className="legs">
+            {day.transport.map((leg, i) => (
+              <div className="leg" key={i}>
+                <div className="leg-route">{leg.from}</div>
+                <div className="leg-meta">
+                  {[leg.mode, leg.freq, leg.time].filter(Boolean).join(" · ")}
+                </div>
+                {leg.cost && <div className="leg-cost">{leg.cost}</div>}
+              </div>
+            ))}
+          </div>
+        </details>
+      )}
+
+      {day.costs && day.costs.length > 0 && (
+        <details className="info-details">
+          <summary>💶 Costes</summary>
+          <div className="costs">
+            {day.costs.map((c, i) => (
+              <div className={`cost-row${c.total ? " total" : ""}`} key={i}>
+                <span>{c.concept}</span>
+                <span className="cost-price">{c.price}</span>
+              </div>
+            ))}
+          </div>
+        </details>
       )}
     </>
   );
