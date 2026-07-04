@@ -6,13 +6,14 @@ import ItemRow from "../components/ItemRow";
 interface Props {
   items: Item[];
   onToggle: (item: Item) => void;
+  onUpdate: (item: Item, changes: { title: string; notes: string }) => void;
   onRemove: (item: Item) => void;
 }
 
 // Orden de días + un grupo final para la lista de deseos (sin día).
 const DAY_ORDER = [...DAYS.map((d) => d.key), "__wishlist__"];
 
-export default function PendingView({ items, onToggle, onRemove }: Props) {
+export default function PendingView({ items, onToggle, onUpdate, onRemove }: Props) {
   const pending = useMemo(
     () => items.filter((i) => !i.checked),
     [items]
@@ -55,7 +56,13 @@ export default function PendingView({ items, onToggle, onRemove }: Props) {
             <div className="section-title">{title}</div>
             <div className="card-list">
               {arr.map((it) => (
-                <ItemRow key={it.id} item={it} onToggle={onToggle} onRemove={onRemove} />
+                <ItemRow
+                  key={it.id}
+                  item={it}
+                  onToggle={onToggle}
+                  onUpdate={onUpdate}
+                  onRemove={onRemove}
+                />
               ))}
             </div>
           </div>

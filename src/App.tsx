@@ -14,7 +14,18 @@ function todayDayKey(): string {
 }
 
 export default function App() {
-  const { items, loading, error, synced, toggle, addItem, removeItem } = useTrip();
+  const {
+    items,
+    dayNotes,
+    loading,
+    error,
+    synced,
+    toggle,
+    addItem,
+    updateItem,
+    removeItem,
+    updateDayNotes,
+  } = useTrip();
   const [tab, setTab] = useState<Tab>("days");
   const [activeDay, setActiveDay] = useState<string>(todayDayKey());
 
@@ -57,13 +68,21 @@ export default function App() {
         ) : tab === "days" ? (
           <DaysView
             items={items}
+            dayNotes={dayNotes}
             activeDay={activeDay}
             setActiveDay={setActiveDay}
             onToggle={toggle}
+            onUpdate={updateItem}
             onRemove={removeItem}
+            onUpdateNotes={updateDayNotes}
           />
         ) : tab === "pending" ? (
-          <PendingView items={items} onToggle={toggle} onRemove={removeItem} />
+          <PendingView
+            items={items}
+            onToggle={toggle}
+            onUpdate={updateItem}
+            onRemove={removeItem}
+          />
         ) : (
           <AddView onAdd={addItem} goToDays={() => setTab("days")} />
         )}

@@ -197,22 +197,35 @@ button {
   margin-top: 14px;
   box-shadow: var(--shadow);
 }
+.info-box-head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
 .info-box-title {
   font-size: 14px;
   font-weight: 700;
-  margin-bottom: 8px;
 }
-.tips {
-  margin: 0;
-  padding-left: 18px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
+.info-box-head .info-box-title {
+  margin-bottom: 0;
 }
-.tips li {
-  font-size: 13.5px;
+.notes-text {
+  font-size: 14px;
   color: var(--text);
-  line-height: 1.4;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.add-notes {
+  border: 1px dashed var(--line);
+  background: transparent;
+  color: var(--muted);
+  border-radius: 10px;
+  padding: 10px;
+  width: 100%;
+  font-size: 14px;
+  font-weight: 600;
 }
 
 .info-details {
@@ -385,16 +398,90 @@ button {
   opacity: 1;
 }
 
-/* delete button for custom items */
-.del-btn {
+/* per-item tools (edit / delete) */
+.item-tools {
   flex: 0 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  align-self: center;
+}
+.tool-btn {
   border: none;
   background: transparent;
   color: var(--muted);
-  font-size: 18px;
-  padding: 4px 6px;
+  padding: 5px;
   line-height: 1;
-  align-self: center;
+  font-size: 15px;
+  border-radius: 8px;
+  display: grid;
+  place-items: center;
+}
+.tool-btn svg {
+  width: 17px;
+  height: 17px;
+}
+.tool-btn:active {
+  background: var(--line);
+}
+
+/* inline edit form (items) */
+.item.editing {
+  display: block;
+  padding: 12px;
+}
+.edit-form {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.edit-title,
+.edit-notes,
+.notes-editor {
+  width: 100%;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  padding: 10px;
+  font-size: 15px;
+  font-family: inherit;
+  background: #fff;
+  color: var(--text);
+}
+.edit-title {
+  font-weight: 600;
+}
+.edit-notes,
+.notes-editor {
+  resize: vertical;
+  min-height: 60px;
+  line-height: 1.4;
+}
+.notes-editor {
+  min-height: 96px;
+}
+.edit-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 4px;
+}
+.btn-sm {
+  border: none;
+  border-radius: 9px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 600;
+}
+.btn-sm.ghost {
+  background: transparent;
+  color: var(--muted);
+}
+.btn-sm.solid {
+  background: var(--dk-red);
+  color: #fff;
+}
+.btn-sm.solid:disabled {
+  opacity: 0.5;
 }
 
 /* ---- Empty / states ---- */

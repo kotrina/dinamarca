@@ -28,3 +28,21 @@ create policy "acceso abierto items"
 
 -- Habilita la sincronización en tiempo real para esta tabla.
 alter publication supabase_realtime add table public.items;
+
+-- Notas de cada día (bloque de texto editable, una fila por día).
+create table if not exists public.day_notes (
+  day text primary key,           -- "20".."27"
+  notes text not null default '',
+  updated_at timestamptz not null default now()
+);
+
+alter table public.day_notes enable row level security;
+
+drop policy if exists "acceso abierto day_notes" on public.day_notes;
+create policy "acceso abierto day_notes"
+  on public.day_notes
+  for all
+  using (true)
+  with check (true);
+
+alter publication supabase_realtime add table public.day_notes;

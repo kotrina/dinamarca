@@ -363,3 +363,11 @@ export const DAYS: TripDay[] = [
 export const ALL_SEED_ITEMS: { day: string; sort: number; item: SeedItem }[] = DAYS.flatMap(
   (d) => d.items.map((item, i) => ({ day: d.key, sort: i, item }))
 );
+
+/**
+ * Texto de notas por defecto de cada día (a partir de `tips`), como bloque de
+ * texto editable. Solo incluye los días que traían notas de la guía original.
+ */
+export const DEFAULT_DAY_NOTES: Record<string, string> = Object.fromEntries(
+  DAYS.filter((d) => d.tips && d.tips.length > 0).map((d) => [d.key, d.tips!.join("\n")])
+);

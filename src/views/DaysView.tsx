@@ -2,21 +2,28 @@ import { useMemo } from "react";
 import type { Item } from "../lib/types";
 import { DAYS } from "../data/trip";
 import ItemRow from "../components/ItemRow";
+import DayNotesBlock from "../components/DayNotesBlock";
 
 interface Props {
   items: Item[];
+  dayNotes: Record<string, string>;
   activeDay: string;
   setActiveDay: (key: string) => void;
   onToggle: (item: Item) => void;
+  onUpdate: (item: Item, changes: { title: string; notes: string }) => void;
   onRemove: (item: Item) => void;
+  onUpdateNotes: (day: string, notes: string) => void;
 }
 
 export default function DaysView({
   items,
+  dayNotes,
   activeDay,
   setActiveDay,
   onToggle,
+  onUpdate,
   onRemove,
+  onUpdateNotes,
 }: Props) {
   const byDay = useMemo(() => {
     const map = new Map<string, Item[]>();
@@ -79,21 +86,21 @@ export default function DaysView({
       ) : (
         <div className="card-list">
           {dayItems.map((it) => (
-            <ItemRow key={it.id} item={it} onToggle={onToggle} onRemove={onRemove} />
+            <ItemRow
+              key={it.id}
+              item={it}
+              onToggle={onToggle}
+              onUpdate={onUpdate}
+              onRemove={onRemove}
+            />
           ))}
         </div>
       )}
 
-      {day.tips && day.tips.length > 0 && (
-        <div className="info-box">
-          <div className="info-box-title">📌 Notas</div>
-          <ul className="tips">
-            {day.tips.map((t, i) => (
-              <li key={i}>{t}</li>
-            ))}
-          </ul>
-        </div>
-      )}
+      <DayNotesBlock
+        notes={dayNotes[day.key] ?? ""}
+        onSave={(notes) => onUpdateNotes(day.key, notes)}
+      />
 
       {day.transport && day.transport.length > 0 && (
         <details className="info-details">
