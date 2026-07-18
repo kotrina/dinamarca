@@ -255,56 +255,12 @@ export const DAYS: TripDay[] = [
     ],
   },
   {
+    // Sábado 25: intercambiado con el domingo. Ahora se hace Odense + Egeskov.
+    // Los slugs siguen siendo "26-egeskov-*" (identificadores estables); solo
+    // cambia el día en el que se visitan.
     key: "25",
     date: "2026-07-25",
     label: "Sáb 25 jul",
-    title: "Malmö",
-    subtitle: "Escapada a Suecia",
-    items: [
-      {
-        slug: "25-stortorget",
-        title: "Stortorget (plaza principal)",
-      },
-      {
-        slug: "25-lilla-torg",
-        title: "Lilla Torg",
-        notes: "Plaza pequeña y encantadora, con casitas de madera.",
-      },
-      {
-        slug: "25-malmohus",
-        title: "Malmöhus Slott",
-        notes: "Castillo + acuario.",
-      },
-      {
-        slug: "25-parques-malmo",
-        title: "Parques de Malmö",
-        notes: "Se puede ver todo andando.",
-      },
-    ],
-    transport: [
-      { from: "Casa → Østerport", mode: "andando", time: "10 min" },
-      {
-        from: "Østerport → Malmö C",
-        mode: "tren directo",
-        freq: "cada 20 min",
-        time: "35–40 min",
-      },
-      { from: "Malmö → Østerport", mode: "tren directo", freq: "cada 20 min" },
-    ],
-    costs: [
-      { concept: "Tren (ida/vuelta)", price: "50–80 €" },
-      { concept: "Malmöhus Slott (castillo y acuario)", price: "~10 €/adulto (niños gratis o reducido)" },
-      { concept: "Total", price: "60–90 €", total: true },
-    ],
-    tips: [
-      "Trenes de ida recomendados: 09:53 o 10:13.",
-      "Trenes de vuelta recomendados: 16:00 o 16:20.",
-    ],
-  },
-  {
-    key: "26",
-    date: "2026-07-26",
-    label: "Dom 26 jul",
     title: "Odense + Egeskov",
     subtitle: "Castillo y laberinto (Egeskov 3–4 h)",
     returnTime: "Vuelta aprox. 16:00",
@@ -347,6 +303,56 @@ export const DAYS: TripDay[] = [
       { concept: "Taxi ida/vuelta", price: "70–90 €" },
       { concept: "Entradas Egeskov (incluye todo)", price: "75–80 €" },
       { concept: "Total", price: "245–290 €", total: true },
+    ],
+  },
+  {
+    // Domingo 26: intercambiado con el sábado. Ahora se hace la escapada a Malmö.
+    // Los slugs siguen siendo "25-*" (identificadores estables); solo cambia el
+    // día en el que se visitan.
+    key: "26",
+    date: "2026-07-26",
+    label: "Dom 26 jul",
+    title: "Malmö",
+    subtitle: "Escapada a Suecia",
+    items: [
+      {
+        slug: "25-stortorget",
+        title: "Stortorget (plaza principal)",
+      },
+      {
+        slug: "25-lilla-torg",
+        title: "Lilla Torg",
+        notes: "Plaza pequeña y encantadora, con casitas de madera.",
+      },
+      {
+        slug: "25-malmohus",
+        title: "Malmöhus Slott",
+        notes: "Castillo + acuario.",
+      },
+      {
+        slug: "25-parques-malmo",
+        title: "Parques de Malmö",
+        notes: "Se puede ver todo andando.",
+      },
+    ],
+    transport: [
+      { from: "Casa → Østerport", mode: "andando", time: "10 min" },
+      {
+        from: "Østerport → Malmö C",
+        mode: "tren directo",
+        freq: "cada 20 min",
+        time: "35–40 min",
+      },
+      { from: "Malmö → Østerport", mode: "tren directo", freq: "cada 20 min" },
+    ],
+    costs: [
+      { concept: "Tren (ida/vuelta)", price: "50–80 €" },
+      { concept: "Malmöhus Slott (castillo y acuario)", price: "~10 €/adulto (niños gratis o reducido)" },
+      { concept: "Total", price: "60–90 €", total: true },
+    ],
+    tips: [
+      "Trenes de ida recomendados: 09:53 o 10:13.",
+      "Trenes de vuelta recomendados: 16:00 o 16:20.",
     ],
   },
   {
