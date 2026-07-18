@@ -8,3 +8,6 @@ dist-ssr
 .DS_Store
 *.log
 .vercel
+
+# Archivos de workspace de editores (locales, no del proyecto)
+*.code-workspace
